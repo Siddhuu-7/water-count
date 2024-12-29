@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Water Count",
+    "slug": "waterProject",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/drinking.jpg",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/drinking.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/drinking.jpg",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.siddharth2005.waterProject"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b34d79fa-f53c-49af-97f0-3e45c491dee4"
+      }
+    }
+  }
+}
