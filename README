@@ -1,0 +1,68 @@
+# Water Count App 📱💧
+
+A React Native mobile application designed to help users track their daily water intake and stay hydrated. Water Count makes it easy to monitor and maintain healthy hydration habits throughout the day.
+
+## Features
+
+- Track daily water consumption in real-time
+- Set personalized daily water intake goals
+- Receive friendly reminders to drink water
+- View hydration history and patterns
+- Simple and intuitive user interface
+- Progress visualization with charts
+- Customizable measurement units (ml, oz)
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Siddhuu-7/water-count.git
+cd water-count
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+4. Run the application:
+```bash
+npx react-native run-android
+# or
+npx react-native run-ios
+```
+
+## Technologies Used
+
+- React Native
+- JavaScript/TypeScript
+- AsyncStorage for local data persistence
+- React Navigation for routing
+- React Native SVG for charts and graphics
+
+## Screenshots
+![loginapp](https://github.com/user-attachments/assets/0b47047f-3f44-46dd-a2dc-181b0bfdf233)
+![water count img](https://github.com/user-attachments/assets/fda36572-78ee-4a2a-a6da-8afd74949a6b)
+![profileapp](https://github.com/user-attachments/assets/de141fb6-9f8d-41d9-b509-e4d1c10697d5)
+![water2 img](https://github.com/user-attachments/assets/e38080fa-1527-4a17-8544-93a10f5b0ef9)
+
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+If you have any questions or suggestions, please open an issue or contact [siddhardhautla19@gmail.com]
+
+## Acknowledgments
+- Inspired by the need to maintain proper hydration in our daily lives
