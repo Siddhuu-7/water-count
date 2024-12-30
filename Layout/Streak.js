@@ -1,66 +1,71 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { View, Text } from 'react-native'
 
-export default function Streak() {
-  const [streakArray, setStreakArray] = useState([]);
-  const [storedLength, setStoredLength] = useState(0);
-  const currentDate = new Date();
-  const date = currentDate.getDate();
+export default function Streak(callback) {
+  const [streak, setStreak] = useState(0);
+
+  const loadStreak = async () => {
+    try {
+      const savedStreak = await AsyncStorage.getItem('currentStreak');
+      const lastUpdate = await AsyncStorage.getItem('lastStreakUpdate');
+      
+      if (savedStreak) {
+        setStreak(parseInt(savedStreak));
+      }
+      return { savedStreak, lastUpdate };
+    } catch (error) {
+      console.error("Error loading streak:", error);
+    }
+  };
+
+  const checkDayTask = async () => {
+    try {
+      const waterTaken = await AsyncStorage.getItem('waterTaken');
+      const limit = await AsyncStorage.getItem('dailyWaterLimit');
+      
+      if (!waterTaken || !limit) {
+        console.log("Water taken or limit is null");
+        return false;
+      }
+
+      return parseInt(waterTaken) >= parseInt(limit);
+    } catch (error) {
+      console.error("Error checking day task:", error);
+      return false;
+    }
+  }
 
   useEffect(() => {
-    const manageStreak = async () => {
-      try {
-        const storedStreak = await AsyncStorage.getItem('streakArray');
-        const parsedStreak = storedStreak ? JSON.parse(storedStreak) : [];
-
-      
-        if (parsedStreak.includes(' ') || (parsedStreak.length > 0 && !parsedStreak.includes(date - 1))) {
-          setStreakArray([date]); 
-          await AsyncStorage.setItem('streakArray', JSON.stringify([date]));
-          await AsyncStorage.setItem('StreakArrayLength', '1');
-          setStoredLength(1);
-        } else {
+    const updateStreak = async () => {
+      const { lastUpdate } = await loadStreak();
+      const today = new Date().toDateString();
+      const storedStreak=await AsyncStorage.getItem('SavedStreak')
+      console.log(storedStreak,"this from streak Component")
+      if (lastUpdate !== today) {
+        const completed = await checkDayTask();
+        if (completed) {
+          const newStreak = streak + 1;
           
-          if (!parsedStreak.includes(date)) {
-            const updatedStreak = [...parsedStreak, date];
-            setStreakArray(updatedStreak);
-            await AsyncStorage.setItem('streakArray', JSON.stringify(updatedStreak));
-            await AsyncStorage.setItem('StreakArrayLength', updatedStreak.length.toString());
-            setStoredLength(updatedStreak.length);
-          } else {
-            setStoredLength(parsedStreak.length); 
-          }
+          setStreak(newStreak);
+          
+          await AsyncStorage.setItem('currentStreak', newStreak.toString());
+          await AsyncStorage.setItem('lastStreakUpdate', today);
+        } else {
+          setStreak(0);
+          await AsyncStorage.setItem('currentStreak', '0');
         }
-      } catch (error) {
-        console.error('Error managing streak:', error);
       }
     };
 
-    manageStreak();
-  }, [date]);
+    updateStreak();
+  }, [callback]); 
 
   return (
-    <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <Text style={styles.fireSymbol}>
-          {storedLength || 0}🔥
-        </Text>
-      </View>
+    <View>
+      <Text>
+        {streak + ' 🔥'}
+      </Text>
     </View>
-  );
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    paddingTop: 15,
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  fireSymbol: {
-    fontSize: 30,
-  },
-});

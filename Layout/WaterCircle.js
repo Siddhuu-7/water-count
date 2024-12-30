@@ -3,17 +3,48 @@ import { View, Text, StyleSheet, Animated ,Button, TouchableOpacity, Dimensions}
 import WaterTake from './WaterTake';
 import Streak from './Streak';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function WaterCalculater() {
   const waterAnimation = useRef(new Animated.Value(0)).current;
-  const waterTaken=AsyncStorage.getItem('waterTaken');
-  
-  const [water, setWater] = useState(Number(waterTaken._j));
-  
-  
+  const [water, setWater] = useState(0);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const getInitialWater = async () => {
+      const waterTaken = await AsyncStorage.getItem('waterTaken');
+      if (waterTaken) {
+        setWater(Number(waterTaken));
+      }
+    };
+    getInitialWater();
+  }, []);
+
+  const limitCheck = async () => {
+    const limit = await AsyncStorage.getItem('dailyWaterLimit');
+    // console.log(limit, "this is default limit");
+    return limit !== null;
+  };
+
+  const renderWaterContent = async () => {
+    const hasLimit = await limitCheck();
+    return hasLimit ? (
+      <WaterTake waterTaken={water} />
+    ) : (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Profile')}
+        >
+<Text style={{color:'red',fontSize:20,fontWeight:'bold'}}>
+  Set Limit
+</Text>
+        </TouchableOpacity>
+      
+    );
+  };
+
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
@@ -46,27 +77,27 @@ export default function WaterCalculater() {
     return () => subscription?.remove();
   }, []);
 
+  const HandelAddWater=async () => {
+    const newWater = water + 100;
+    setWater(newWater);
+    await AsyncStorage.setItem('waterTaken', String(newWater));
+  }
   return (
     <View style={styles.container}>
       <View style={styles.circle}>
         <Animated.View style={[styles.water, { transform: [{ translateY }] }]} />
         <Text style={styles.text}>
-         <WaterTake waterTaken={water}/>
+          {renderWaterContent()}
         </Text>
       </View>
-      <Streak/>
-      <TouchableOpacity onPress={() => {
-        const newWater = water + 100;
-        setWater(newWater);
-       console.log(waterTaken._j)
-
-        console.log(water)
-        
-              }}
-              
-              >
-                <Text style={{backgroundColor:'lightblue',color:'blue',padding:10,borderRadius:10}}>Add 100Ml</Text>
-              </TouchableOpacity>
+      <Streak  callback={HandelAddWater}/>
+      <TouchableOpacity 
+        onPress={HandelAddWater}
+      >
+        <Text style={{backgroundColor:'lightblue', color:'blue', padding:10, borderRadius:10}}>
+          Add 100Ml
+        </Text>
+      </TouchableOpacity>
     </View>
   )
 }

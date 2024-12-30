@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Animated, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Animated, ScrollView, Dimensions, Alert } from 'react-native';
 // import {obj} from './Streak';
 import SetLimit from './SetLimit';
 import { OutButton } from './Buttons';
@@ -12,21 +12,23 @@ export default function Profile() {
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
     
-    // Add animated values for both name and streak
+    
     const nameShake = new Animated.Value(0);
     const streakShake = new Animated.Value(0);
     const navigation = useNavigation();
-    // Add state for streak
+    const [warning,setWarning]=useState(false)    
     const [streak, setStreak] = useState(0);
     const [parsedData,setParsedData]=useState({})
-    // Add useEffect to fetch streak
+    
     useEffect(() => {
         const getStreak = async () => {
             try {
-                const value = await AsyncStorage.getItem('StreakArrayLength');
+                // hello this dont forget
+                const value = await AsyncStorage.getItem('currentStreak')|| "oops";
+                console.log(value,"this is streak")
                 const userData = await AsyncStorage.getItem('userData')
                 setParsedData(JSON.parse(userData))
-                console.log(parsedData, "userdata");
+                
                 setStreak(value);
                 console.log(streak,"this is the streak")
             } catch (error) {
@@ -183,7 +185,7 @@ export default function Profile() {
                     </View>
                     <Text style={[styles.value, responsiveStyles.value, {fontFamily:'Italiana'}]}>{parsedData.email}</Text>
                 </View>
-                <SetLimit/>
+                <SetLimit />
                
             </View>
             

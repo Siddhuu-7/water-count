@@ -11,6 +11,7 @@ import SetLimit  from './SetLimit'
 import Notification from './Notification'
 import Login from './Login'
 import Settings from './Settings'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 export default function App() {
@@ -53,6 +54,7 @@ const HomeScreen = () => {
   const navigation = useNavigation(); 
 
   React.useEffect(() => {
+    
     navigation.setOptions({
       headerRight: () => (
         <NotificationIconButton 
@@ -63,6 +65,7 @@ const HomeScreen = () => {
             
           }} 
         />
+
       ),
     });
     // navigation.setOptions({
