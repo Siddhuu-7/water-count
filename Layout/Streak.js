@@ -4,6 +4,8 @@ import { View, Text } from 'react-native'
 
 export default function Streak(callback) {
   const [streak, setStreak] = useState(0);
+  
+  
 
   const loadStreak = async () => {
     try {
@@ -40,16 +42,18 @@ export default function Streak(callback) {
     const updateStreak = async () => {
       const { lastUpdate } = await loadStreak();
       const today = new Date().toDateString();
-      const storedStreak=await AsyncStorage.getItem('SavedStreak')
-      console.log(storedStreak,"this from streak Component")
+      // const storedStreak=await AsyncStorage.getItem('SavedStreak')
+      // console.log(storedStreak,"this from streak Component")
       if (lastUpdate !== today) {
         const completed = await checkDayTask();
         if (completed) {
+          
           const newStreak = streak + 1;
           
           setStreak(newStreak);
           
           await AsyncStorage.setItem('currentStreak', newStreak.toString());
+         
           await AsyncStorage.setItem('lastStreakUpdate', today);
         } else {
           setStreak(0);

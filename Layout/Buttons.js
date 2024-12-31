@@ -14,7 +14,7 @@ export function Button({ name, callback }) {
           {"   "}<Icon 
             name={name} 
             size={24} 
-            color={'blue'} 
+            color={'#000000'} 
             style={{ marginLeft: 20 }}
           />  
         </Text>

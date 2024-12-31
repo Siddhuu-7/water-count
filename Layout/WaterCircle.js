@@ -78,9 +78,42 @@ export default function WaterCalculater() {
   }, []);
 
   const HandelAddWater=async () => {
-    const newWater = water + 100;
+
+    const StoredWater=await AsyncStorage.getItem('waterTaken')
+    console.log(StoredWater,"this is stored water")
+    let newWater;
+    if(StoredWater){
+      newWater=parseInt(StoredWater)+100;
+    }else{
+      newWater = water + 100;
+    }
+
+     
+    const storeStreak=await AsyncStorage.getItem('currentStreak')
+    console.log(storeStreak,"this is yestarday streak")
     setWater(newWater);
     await AsyncStorage.setItem('waterTaken', String(newWater));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
   return (
     <View style={styles.container}>

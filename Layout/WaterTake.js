@@ -5,58 +5,39 @@ import AnimatedNumbers from 'react-native-animated-numbers';
 
 export default function WaterTake({ waterTaken }) {
   const [dailyLimit, setDailyLimit] = useState(0);
-  const [storedWaterTaken, setStoredWaterTaken] = useState(0);
+ 
 
   useEffect(() => {
-    const initializeData = async () => {
-      const storedValue = await AsyncStorage.getItem('waterTaken');
-      const lastUpdateDate = await AsyncStorage.getItem('lastUpdateDate');
-      const today = new Date().toDateString();
+    const checkAndResetWater = async () => {
+      try {
+        
+        const lastDate = await AsyncStorage.getItem('lastWaterDate');
+        const today = new Date().toDateString();
 
-      if (lastUpdateDate !== today) {
-        await AsyncStorage.setItem('waterTaken', '0');
-        setStoredWaterTaken(0);
-        await AsyncStorage.setItem('lastUpdateDate', today);
-      } else if (storedValue !== null) {
-        setStoredWaterTaken(parseInt(storedValue, 10));
+        
+        if (!lastDate || lastDate !== today) {
+          await AsyncStorage.multiSet([
+            ['waterTaken', '0'],
+            ['lastWaterDate', today]
+          ]);
+        }
+
+        
+        const dLimit = await AsyncStorage.getItem('dailyWaterLimit');
+        setDailyLimit(dLimit ? parseInt(dLimit) : 0);
+      } catch (error) {
+        console.error('Error checking water reset:', error);
       }
     };
 
-    getDailyLimit();
-    initializeData();
+    checkAndResetWater();
   }, []);
-
-  useEffect(() => {
-    const validWaterTaken = waterTaken || 0;
-    storeWaterTaken(validWaterTaken);
-    setStoredWaterTaken(validWaterTaken);
-  }, [waterTaken]);
-
-  const getDailyLimit = async () => {
-    try {
-      const value = await AsyncStorage.getItem('dailyWaterLimit');
-      
-      setDailyLimit(parseInt(value, 10));
-    } catch (error) {
-      console.error('Error getting daily limit:', error);
-    }
-  };
-
-  const storeWaterTaken = async (value) => {
-    try {
-      await AsyncStorage.setItem('waterTaken', value.toString());
-      const savedValue = await AsyncStorage.getItem('waterTaken');
-      // console.log(savedValue,"know debuging this ","this value is",value.toString())
-    } catch (error) {
-      console.error('Error storing water taken:', error);
-    }
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.numberContainer}>
         <AnimatedNumbers
-          animateToNumber={parseInt(storedWaterTaken || 0)}
+          animateToNumber={parseInt(waterTaken || 0)}
           fontStyle={styles.text}
           duration={1000}
         />

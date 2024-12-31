@@ -8,11 +8,11 @@ export default function SetLimit( ) {
   const navigation = useNavigation();
   const [number, onChangeNumber] = useState('');
   const [Launch, setLaunch] = useState(false);
- const [warning,setWarning]=useState(false)
   const storeDailyLimit = async (value) => {
+    
     try { 
       await AsyncStorage.setItem('dailyWaterLimit', value.toString());
-      console.log('Daily limit stored:', value);
+      checkLimit=await AsyncStorage.getItem('dailyWaterLimit')
     } catch (error) {
       console.error('Error storing daily limit:', error);
     }
@@ -20,22 +20,10 @@ export default function SetLimit( ) {
 
   
   const handlePress = () => {
-    if (warning) {
-      
-      setWarning(false);
-    } else {
-      
-      Alert.alert(
-        "Warning",
-        "If you try to reset your limit again, your consumed water will be deleted",
-        [{ text: "OK" }]
-      );
-      setWarning(true);
-      return; 
-    }
+    
 
     if (!number || isNaN(number) || parseInt(number, 10) <= 0) {
-      Alert.alert('Please enter a valid positive number');
+      Alert.alert('Please enter a valid Limit number');
       return;
     }
     

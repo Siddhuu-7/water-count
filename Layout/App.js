@@ -11,7 +11,8 @@ import SetLimit  from './SetLimit'
 import Notification from './Notification'
 import Login from './Login'
 import Settings from './Settings'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
+import Graphs from './Graphs'
 
 
 export default function App() {
@@ -29,7 +30,9 @@ export default function App() {
         }}>
           <Stack.Screen name='Login' component={Login}/>
           <Stack.Screen name='Home' component={HomeScreen}/>
+          <Stack.Screen name='Graphs' component={Graphs}/>
           <Stack.Screen name="SetLimit" component={SetLimit} />
+
           <Stack.Screen 
             name='Profile' 
             component={Profile}
@@ -90,6 +93,10 @@ const HomeScreen = () => {
           <View style={styles.leftButton}>
             <Button name={'home'} callback={() => navigation.navigate('Home')}/>
           </View>
+
+                    <View style={styles.leftButton}>
+                      <Button name={'area-chart'} callback={()=>navigation.navigate('Graphs')}/>
+                    </View>
           <View style={styles.rightButton}>
             <Button name={'user'} callback={() => navigation.navigate('Profile')}/>
           </View>
