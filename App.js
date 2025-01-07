@@ -59,7 +59,7 @@ export default function App() {
         <Stack.Screen name="Start" component={Start} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen 
-          name="History" 
+          name="Analysis" 
           component={History} 
           options={{ headerShown: true }} 
         />

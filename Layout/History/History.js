@@ -23,14 +23,11 @@ const FetchData=async()=>{
   
   setWaterData(parsedRecords)
 }
-
 useFocusEffect(
   React.useCallback(() => {
       FetchData();
   }, [])
 );
-
-
   return (
     <SafeAreaView style={{
       flex: 1,

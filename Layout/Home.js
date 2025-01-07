@@ -29,7 +29,7 @@ export default function Home() {
 
         <TouchableOpacity 
           style={styles.headerButton}
-          onPress={() => navigation.navigate('History')}
+          onPress={() => navigation.navigate('Analysis')}
         >
           <Text style={styles.buttonText}>
             <Icon name='history' size={20} color='white'/> Anyalsis</Text>
